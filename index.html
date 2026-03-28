@@ -33,7 +33,7 @@
     font-family: 'Sarabun', sans-serif;
     font-size: 16px;
     line-height: 1.7;
-    overflow-x: hidden;
+    overflow-x: clip; /* เปลี่ยนจาก hidden เป็น clip เพื่อให้ position: sticky ของ nav เลื่อนตามจอได้ปกติ */
   }
 
   /* HERO */
@@ -229,7 +229,8 @@
     white-space: nowrap;
     transition: all 0.2s;
   }
-  .nav-links a:hover { color: var(--gold); background: rgba(240,180,41,0.08); }
+  .nav-links a:hover, 
+  .nav-links a.active { color: var(--gold); background: rgba(240,180,41,0.15); } /* เพิ่ม Highlight เมื่อเลื่อนมาถึงส่วนนี้ */
 
   /* MAIN */
   .main {
@@ -532,6 +533,39 @@
   }
   footer span { color: var(--gold); }
 
+  /* BACK TO TOP */
+  .back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--gold), var(--orange));
+    color: #0a0a14;
+    border: none;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(240,180,41,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .back-to-top.show:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(240,180,41,0.5);
+  }
+
   /* ANIMATIONS */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -675,6 +709,9 @@
 </head>
 <body>
 
+<!-- BACK TO TOP BUTTON -->
+<button id="backToTop" class="back-to-top" title="กลับขึ้นบนสุด">▲</button>
+
 <!-- HERO -->
 <div class="hero">
   <div class="grid-bg"></div>
@@ -797,7 +834,7 @@
   <div class="hero-sub">.online</div>
   <p class="hero-desc">คู่มือฉบับสมบูรณ์สำหรับมือใหม่ · เลือกสาย · อัพสเตต · ล่าบอส · ครบจบในที่เดียว</p>
   <div class="hero-btns">
-    <a href="#class" class="btn-primary">เริ่มต้นเลย →</a>
+    <a href="#newbie-guide" class="btn-primary">เริ่มต้นเลย →</a>
     <a href="#crystal" class="btn-secondary">ระบบผลึก</a>
   </div>
   <div class="scroll-hint">SCROLL</div>
@@ -859,9 +896,9 @@
         <div class="step-num">3</div>
         <div class="step-content">
           <h4>ฟาร์มผลึกและเก็บเลเวลยาวๆ</h4>
-          <p>พยายามฟาร์มให้ได้สัก 7-8 ผลึก หรือดันเลเวลให้อยู่ในช่วง 1,700 - 1,800</p>
+          <p>พยายามฟาร์มให้ได้สัก 7000-8000 ผลึก หรือดันเลเวลให้อยู่ในช่วง 1,700 - 1,800</p>
           <ul class="guide-list" style="margin-top: 8px;">
-            <li><span class="text-green">ช่วงคูณ Drop:</span> พยายามเติม Drop แล้วหาแมปที่สามารถตีมอนสเตอร์ตายได้ไวๆ (ตีตายทุกวัน)</li>
+            <li><span class="text-green">ช่วงคูณdrop:</span> พยายามเติมdrop แล้วหาแมปที่ตีตายทุกตัว ทั้งคนทั้ง pet</li>
             <li><span class="text-blue">ช่วงคูณ EXP:</span> พยายามปั้นและฟาร์ม Pet ทุกครั้ง <strong>เน้นเล่นสายใดสายหนึ่งเป็นหลัก อย่าผสมหลายสาย</strong> ไม่งั้นจะไม่เก่งสักสาย</li>
           </ul>
         </div>
@@ -1143,6 +1180,45 @@
       }
     });
   }
+
+  // ระบบ Scroll Highlight สำหรับ Navbar
+  document.addEventListener("DOMContentLoaded", function() {
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll(".nav-links a");
+
+    window.addEventListener("scroll", () => {
+      let current = "";
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop;
+        // ลบด้วย 80px เพื่อชดเชยความสูงของเมนูด้านบนที่บังอยู่
+        if (window.scrollY >= sectionTop - 80) {
+          current = section.getAttribute("id");
+        }
+      });
+
+      navLinks.forEach((link) => {
+        link.classList.remove("active");
+        if (current && link.getAttribute("href") === `#${current}`) {
+          link.classList.add("active");
+        }
+      });
+    });
+
+    // ระบบ Back to Top
+    const backToTopBtn = document.getElementById("backToTop");
+    if (backToTopBtn) {
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 400) {
+          backToTopBtn.classList.add("show");
+        } else {
+          backToTopBtn.classList.remove("show");
+        }
+      });
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+  });
   </script>
 
 <!-- CRYSTAL -->
