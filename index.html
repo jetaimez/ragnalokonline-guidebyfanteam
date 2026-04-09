@@ -7,28 +7,30 @@
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700;800&family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --gold: #f0b429;
-    --gold2: #ffd700;
-    --red: #e63946;
-    --dark: #0a0a14;
-    --dark2: #10101e;
-    --dark3: #181828;
-    --panel: #1a1a2e;
-    --panel2: #16213e;
-    --border: #2a2a4a;
-    --text: #e8e8f0;
-    --muted: #8888aa;
-    --green: #4ade80;
-    --blue: #60a5fa;
-    --orange: #fb923c;
-    --purple: #c084fc;
-    --cyan: #22d3ee;
+    --gold: #F4B41A;
+    --gold2: #FCEE21;
+    --red: #FF4C4C;
+    --dark: #0F111A;
+    --dark2: #1A1D2D;
+    --dark3: #22263A;
+    --panel: rgba(27, 30, 43, 0.75); /* ปรับให้กล่องมีความโปร่งใส 75% */
+    --panel2: #24283B;
+    --border: #2D3248;
+    --text: #F1F5F9;
+    --muted: #94A3B8;
+    --green: #22C55E;
+    --blue: #3B82F6;
+    --orange: #F97316;
+    --purple: #A855F7;
+    --cyan: #06B6D4;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: var(--dark);
+    /* ใส่ URL รูปภาพของเกมตรงนี้ (มี Overlay สีดำทับ 80% เพื่อให้อ่านข้อความง่ายขึ้น) */
+    background: linear-gradient(rgba(15, 17, 26, 0.8), rgba(15, 17, 26, 0.8)), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+    background-size: cover;
     color: var(--text);
     font-family: 'Sarabun', sans-serif;
     font-size: 16px;
@@ -47,7 +49,7 @@
     text-align: center;
     padding: 40px 20px;
     overflow: hidden;
-    background: radial-gradient(ellipse at 50% 0%, #1a0a2e 0%, var(--dark) 70%);
+    background: radial-gradient(ellipse at 50% 0%, rgba(30, 27, 75, 0.6) 0%, transparent 70%); /* ปรับแสงด้านบนให้กลืนกับรูปภาพ */
   }
 
   .hero::before {
@@ -94,10 +96,12 @@
   }
 
   .hero-title span {
-    background: linear-gradient(135deg, var(--gold), var(--gold2), var(--orange));
+    background: linear-gradient(135deg, var(--gold), var(--gold2), var(--orange), var(--gold));
+    background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: gradientShift 5s ease infinite;
   }
 
   .hero-sub {
@@ -227,10 +231,25 @@
     padding: 6px 14px;
     border-radius: 4px;
     white-space: nowrap;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+    border-radius: 2px;
   }
   .nav-links a:hover, 
-  .nav-links a.active { color: var(--gold); background: rgba(240,180,41,0.15); } /* เพิ่ม Highlight เมื่อเลื่อนมาถึงส่วนนี้ */
+  .nav-links a.active { color: var(--gold); background: rgba(240,180,41,0.15); }
+  .nav-links a:hover::after, 
+  .nav-links a.active::after { width: 50%; }
 
   /* MAIN */
   .main {
@@ -289,13 +308,18 @@
   .card {
     background: var(--panel);
     border: 1px solid var(--border);
+    backdrop-filter: blur(8px); /* เพิ่มเอฟเฟกต์เบลอกระจก */
     border-radius: 12px;
     padding: 24px;
     position: relative;
     overflow: hidden;
-    transition: border-color 0.2s;
+    transition: all 0.3s ease;
   }
-  .card:hover { border-color: rgba(240,180,41,0.3); }
+  .card:hover { 
+    border-color: var(--gold); 
+    box-shadow: 0 8px 32px rgba(240,180,41,0.15); 
+    transform: translateY(-4px); 
+  }
   .card::before {
     content: '';
     position: absolute;
@@ -311,6 +335,7 @@
   /* CLASS CARDS */
   .class-card {
     background: var(--panel);
+    backdrop-filter: blur(8px); /* เพิ่มเอฟเฟกต์เบลอกระจก */
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 24px 20px;
@@ -417,9 +442,13 @@
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 18px 20px;
-    transition: border-color 0.2s;
+    transition: all 0.3s ease;
   }
-  .step:hover { border-color: rgba(240,180,41,0.3); }
+  .step:hover { 
+    border-color: var(--gold); 
+    box-shadow: 0 4px 20px rgba(240,180,41,0.1); 
+    transform: translateX(6px); 
+  }
   .step-num {
     font-family: 'Chakra Petch', sans-serif;
     font-size: 22px;
@@ -444,9 +473,13 @@
     border-radius: 10px;
     padding: 18px;
     text-align: center;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
   }
-  .crystal-card:hover { transform: translateY(-2px); }
+  .crystal-card:hover { 
+    transform: translateY(-4px) scale(1.02); 
+    border-color: var(--gold);
+    box-shadow: 0 8px 24px rgba(240,180,41,0.15);
+  }
   .crystal-emoji { font-size: 32px; margin-bottom: 8px; }
   .crystal-name {
     font-family: 'Chakra Petch', sans-serif;
@@ -582,6 +615,33 @@
     0%, 100% { opacity: 0.4; }
     50% { opacity: 0.8; }
   }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes rippleAura {
+    0%, 100% { transform: translateX(-50%) rotateX(75deg) scale(0.8); opacity: 0.2; }
+    50% { transform: translateX(-50%) rotateX(75deg) scale(1.4); opacity: 0.6; }
+  }
+  
+  /* PLAY GAME GLOW EFFECTS */
+  .btn-play-game {
+    animation: btnGlow 1.2s infinite alternate ease-in-out;
+  }
+  .nav-play-game {
+    color: var(--gold2) !important;
+    font-weight: 800 !important;
+    animation: navTextGlow 1.2s infinite alternate ease-in-out;
+  }
+  @keyframes btnGlow {
+    from { box-shadow: 0 0 10px rgba(244, 180, 26, 0.4); }
+    to { box-shadow: 0 0 30px rgba(244, 180, 26, 1), 0 0 15px rgba(252, 238, 33, 0.6) inset; }
+  }
+  @keyframes navTextGlow {
+    from { text-shadow: 0 0 2px rgba(252, 238, 33, 0.2); }
+    to { text-shadow: 0 0 20px rgba(252, 238, 33, 1), 0 0 10px rgba(255, 255, 255, 0.8); }
+  }
 
   /* LEVEL BADGE */
   .lv-badge {
@@ -659,7 +719,21 @@
   }
   .hippo-float:hover + .hippo-bubble,
   .hippo-wrap:hover .hippo-bubble { opacity: 1; transform: scale(1) translateY(0); }
-  .hippo-wrap { position: absolute; }
+  .hippo-wrap { 
+    position: absolute; 
+  }
+  .hippo-wrap::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(96, 165, 250, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: rippleAura 3s infinite ease-in-out;
+    z-index: -1;
+  }
 
   /* IDLE BADGE */
   .idle-badge {
@@ -847,7 +921,8 @@
   <div class="hero-sub">.online</div>
   <p class="hero-desc">คู่มือฉบับสมบูรณ์สำหรับมือใหม่ · เลือกสาย · อัพสเตต · ล่าบอส · ครบจบในที่เดียว</p>
   <div class="hero-btns">
-    <a href="#newbie-guide" class="btn-primary">เริ่มต้นเลย →</a>
+    <a href="https://ragnalok.online" target="_blank" class="btn-primary btn-play-game">เข้าเล่นเกมส์ 🎮</a>
+    <a href="#newbie-guide" class="btn-secondary">เริ่มต้นเลย →</a>
     <a href="#crystal" class="btn-secondary">ระบบผลึก</a>
   </div>
   <div class="scroll-hint">SCROLL</div>
@@ -858,6 +933,7 @@
   <div class="nav-inner">
     <div class="nav-logo">🦛 RAGNALOK</div>
     <ul class="nav-links">
+      <li><a href="https://ragnalok.online" target="_blank" class="nav-play-game">เข้าเล่นเกมส์ 🎮</a></li>
       <li><a href="#newbie-guide">มือใหม่</a></li>
       <li><a href="#class-guide">สายอาชีพ</a></li>
       <li><a href="#crystal">ผลึก</a></li>
